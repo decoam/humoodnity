@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Humoodnity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f0ea;
+            --card: #ffffff;
+            --accent: #f59f00;
+            --accent-2: #2563eb;
+            --text: #1f2933;
+            --muted: #52606d;
+            --ring: rgba(245, 159, 0, 0.25);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 20% 20%, #ffe8c2 0, transparent 25%),
+                        radial-gradient(circle at 85% 10%, #dbeafe 0, transparent 20%),
+                        radial-gradient(circle at 50% 90%, #fde68a 0, transparent 30%),
+                        var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            overflow-x: hidden;
+        }
+        
+        /* Welcome Screen Overlay */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff7ed 0%, #e0f2fe 50%, #fde68a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.8s ease-out 2.5s forwards;
+        }
+        
+        .welcome-overlay.hidden {
+            display: none;
+        }
+        
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            animation: slideUpFadeIn 1s ease-out;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            box-shadow: 0 20px 60px rgba(245, 159, 0, 0.3);
+            animation: logoPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            opacity: 0.5;
+            animation: logoRipple 2s ease-out infinite;
+        }
+        
+        .welcome-text {
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .welcome-text h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 36px;
+            margin: 0 0 12px;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-text p {
+            font-size: 18px;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .welcome-subtitle {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--muted);
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        @keyframes slideUpFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes logoRipple {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        .main-content {
+            opacity: 0;
+            animation: fadeInContent 0.8s ease-out 2.5s forwards;
+        }
+        
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .shell {
+            width: min(980px, 100%);
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+        .hero {
+            background: linear-gradient(135deg, #fff7ed, #e0f2fe);
+            border-radius: 20px;
+            padding: 28px 28px 32px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: "🤝";
+            position: absolute;
+            right: 18px;
+            bottom: 14px;
+            font-size: 52px;
+            opacity: 0.2;
+        }
+        .hero-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .hero-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(245, 159, 0, 0.2);
+        }
+        .hero-logo-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero h1 {
+            margin: 0 0 12px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 32px;
+            color: var(--text);
+        }
+        .hero p {
+            margin: 0 0 14px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        .badge span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border-radius: 999px;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid #eef2f7;
+        }
+        .card h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+        .card p {
+            margin: 0 0 18px;
+            color: var(--muted);
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #d7dfe8;
+            background: #f9fbfd;
+            font-size: 15px;
+            color: var(--text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 6px var(--ring);
+            transform: translateY(-1px);
+        }
+        .grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        button {
+            width: 100%;
+            padding: 14px 16px;
+            margin-top: 6px;
+            background: linear-gradient(135deg, var(--accent), #f97316);
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        button:hover { transform: translateY(-1px) scale(1.01); }
+        button:active { transform: translateY(0); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25); }
+        #hasil {
+            margin: 18px 0 0;
+            padding: 12px 14px;
+            background: #f0f4ff;
+            border-radius: 12px;
+            color: #1d3a8a;
+            min-height: 28px;
+            font-weight: 600;
+            border: 1px solid #d6e3ff;
+        }
+        .footer-note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .chat-wrap {
+    margin-top: 14px;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    padding: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+.chat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.chat-title {
+    font-weight: 700;
+}
+.chat-sub {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+.chat-log {
+    margin-top: 12px;
+    height: 220px;
+    overflow: auto;
+    padding: 10px;
+    border-radius: 12px;
+    background: #f9fbfd;
+    border: 1px solid #e8eef6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.bubble {
+    max-width: 85%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    line-height: 1.4;
+    font-size: 14px;
+    border: 1px solid transparent;
+}
+.bubble.user {
+    align-self: flex-end;
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+.bubble.bot {
+    align-self: flex-start;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+.chat-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 10px;
+}
+.chat-row input {
+    margin: 0;
+}
+.chat-row button {
+    margin: 0;
+    width: auto;
+    padding: 12px 14px;
+    box-shadow: none;
+    background: linear-gradient(135deg, var(--accent-2), #60a5fa);
+}
+.small-note {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+.hidden {
+    display: none;
+}
+
+.error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.15) !important;
+}
+.alert {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #9f1239;
+  font-weight: 600;
+}
+
+.chat-head {
+  background: linear-gradient(135deg, #fff7ed, #eff6ff);
+  border: 1px solid #e8eef6;
+  border-radius: 14px;
+  padding: 12px 12px;
+}
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid #e8eef6;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+  font-size: 18px;
+}
+.bubble {
+  position: relative;
+}
+.bubble.bot::before,
+.bubble.user::before {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+}
+.bubble.bot::before {
+  left: -4px;
+  background: #eff6ff;
+  border-left: 1px solid #bfdbfe;
+  border-bottom: 1px solid #bfdbfe;
+}
+.bubble.user::before {
+  right: -4px;
+  background: #fff7ed;
+  border-right: 1px solid #fed7aa;
+  border-top: 1px solid #fed7aa;
+}
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #64748b;
+  opacity: .6;
+  animation: blink 1s infinite;
+}
+.dot:nth-child(2){ animation-delay: .15s; }
+.dot:nth-child(3){ animation-delay: .3s; }
+@keyframes blink {
+  0%, 100% { transform: translateY(0); opacity: .35; }
+  50% { transform: translateY(-2px); opacity: .8; }
+}
+
+        /* Responsive Styles for Mobile */
+        @media (max-width: 768px) {
+            .welcome-text h1 {
+                font-size: 28px;
+            }
+            
+            .welcome-text p {
+                font-size: 16px;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
+                font-size: 56px;
+            }
+            
+            .hero-logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            .hero-logo-text {
+                font-size: 20px;
+            }
+            
+            body {
+                padding: 16px;
+                align-items: flex-start;
+            }
+            
+            .shell {
+                width: 100%;
+                gap: 16px;
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 20px;
+                border-radius: 16px;
+            }
+            
+            .hero::after {
+                font-size: 36px;
+                right: 12px;
+                bottom: 10px;
+            }
+            
+            .hero h1 {
+                font-size: 24px;
+                line-height: 1.3;
+            }
+            
+            .hero p {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+            
+            .badge {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .card {
+                padding: 18px;
+                border-radius: 14px;
+            }
+            
+            .card h2 {
+                font-size: 20px;
+            }
+            
+            .card p {
+                font-size: 14px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            input, select {
+                padding: 10px 12px;
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            input:focus, select:focus {
+                box-shadow: 0 0 0 4px var(--ring);
+            }
+            
+            button {
+                padding: 12px 14px;
+                font-size: 14px;
+                min-height: 44px; /* Touch-friendly minimum size */
+            }
+            
+            .suggestion-btn {
+                min-height: 36px;
+                padding: 8px 12px;
+            }
+            
+            #hasil {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .footer-note {
+                font-size: 12px;
+            }
+            
+            /* Chat Responsive */
+            .chat-wrap {
+                margin-top: 12px;
+                padding: 12px;
+                border-radius: 12px;
+            }
+            
+            .chat-head {
+                padding: 10px;
+            }
+            
+            .chat-title {
+                font-size: 15px;
+            }
+            
+            .avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+            
+            .chat-log {
+                height: 200px;
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .bubble {
+                max-width: 90%;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .chat-row {
+                gap: 8px;
+                margin-top: 8px;
+            }
+            
+            .chat-row input {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .chat-row button {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+            
+            .small-note {
+                font-size: 11px;
+            }
+            
+            .alert {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .welcome-text h1 {
+                font-size: 24px;
+            }
+            
+            .welcome-text p {
+                font-size: 14px;
+            }
+            
+            .welcome-subtitle {
+                font-size: 12px;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+                font-size: 48px;
+            }
+            
+            .hero-logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
+            }
+            
+            .hero-logo-text {
+                font-size: 18px;
+            }
+            
+            body {
+                padding: 12px;
+            }
+            
+            .hero {
+                padding: 16px;
+            }
+            
+            .hero h1 {
+                font-size: 22px;
+            }
+            
+            .hero::after {
+                font-size: 28px;
+                opacity: 0.15;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .card h2 {
+                font-size: 18px;
+            }
+            
+            input, select {
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            .chat-log {
+                height: 180px;
+            }
+            
+            .bubble {
+                max-width: 95%;
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+            
+            .chat-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-row button {
+                width: 100%;
+            }
+        }
+        
+       
+        @media (max-width: 768px) and (orientation: landscape) {
+            .chat-log {
+                height: 150px;
+            }
+        }
+
+
+        .msg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta .name {
+  font-weight: 700;
+  color: #334e68;
+}
+
+.meta .time {
+  opacity: .85;
+}
+
+.msg.user .meta {
+  justify-content: flex-end;
+}
+
+.msg.user .meta .name {
+  color: #9a3412;
+}
+
+        
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen Overlay -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="logo-container">
+            <div class="logo">💛</div>
+            <div class="welcome-text">
+                <h1>Selamat Datang</h1>
+                <p>Ruang aman untuk memahami perasaanmu</p>
+                <div class="welcome-subtitle">Humanity-first • Mood Prediction</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="shell">
+            <div class="hero">
+                <div class="hero-logo">
+                    <div class="hero-logo-icon">💛</div>
+                    <div class="hero-logo-text">Humoodnity</div>
+                </div>
+            
+                <h1>Dengarkan Dirimu, Raih Hari yang Lebih Baik</h1>
+            <p>Kita semua manusia dengan spektrum emosi yang luas. Isi data sederhana ini untuk membantu memetakan suasana hati, lalu beri ruang bagi diri sendiri untuk beristirahat atau bergerak maju.</p>
+            <p class="footer-note">Data ini hanya untukmu gunanya agar kamu bisa mengambil keputusan kecil yang lebih peduli pada diri sendiri.</p>
+        </div>
+
+        <div class="card">
+            <h2>Prediksi Mood 💛</h2>
+            <p>Isi beberapa indikator harian, lalu klik prediksi.</p>
+            <div class="grid">
+                <div>
+                    <label for="tidur_jam">Jam tidur</label>
+                    <input id="tidur_jam" type="number" placeholder="cth: 7" />
+                </div>
+                <div>
+                    <label for="stres">Stres (1–5)</label>
+                    <input id="stres" type="number" min="1" max="5" placeholder="1=tenang, 5=tinggi" />
+                </div>
+                <div>
+                    <label for="capek">Capek (1–5)</label>
+                    <input id="capek" type="number" min="1" max="5" placeholder="1=segar, 5=letih" />
+                </div>
+                <div>
+                    <label for="aktivitas">Aktivitas</label>
+                    <select id="aktivitas">
+                        <option value="kerja">Kerja</option>
+                        <option value="kuliah">Kuliah</option>
+                        <option value="libur">Libur</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="prediksi()">Prediksi Mood</button>
+            <div id="alert" class="alert hidden"></div>
+            <div id="hasil"></div>
+
+            <!-- Chat UI (muncul setelah prediksi) -->
+            <div id="chatSection" class="chat-wrap hidden">
+                <div class="chat-title">
+                    <div class="avatar">🤖</div>
+                    <div>
+                      <div style="font-weight:800;">Ngobrol sebentar</div>
+                      <div class="chat-sub">Teman ngobrol ringan berdasarkan mood-mu.</div>
+                    </div>
+                  </div>
+            
+              <div id="chatLog" class="chat-log"></div>
+            
+              <div class="chat-row">
+                <input id="chatInput" type="text" placeholder="Tulis yang kamu rasakan..." />
+                <button id="sendBtn" type="button">Kirim</button>
+              </div>
+            
+              <div class="small-note">
+                Catatan: Ini pendampingan ringan, bukan diagnosis/terapi. Kalau kamu merasa tidak aman, hubungi orang terdekat atau layanan darurat setempat.
+              </div>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+    <script>
+        // Welcome Screen Control
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeOverlay = document.getElementById('welcomeOverlay');
+            
+            // Allow click to skip welcome screen
+            welcomeOverlay.addEventListener('click', function() {
+                welcomeOverlay.style.animation = 'fadeOut 0.5s ease-out forwards';
+                setTimeout(() => {
+                    welcomeOverlay.classList.add('hidden');
+                }, 500);
+            });
+            
+            // Auto-hide after animation completes (3.3s total)
+            setTimeout(() => {
+                welcomeOverlay.classList.add('hidden');
+            }, 3300);
+        });
+        
+        let lastMood = null;
+
+        function nowTime() {
+  const d = new Date();
+  return d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+        }
+
+        function addBubble(text, who = "bot") {
+  const log = document.getElementById("chatLog");
+
+  const wrap = document.createElement("div");
+  wrap.className = `msg ${who}`;
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+
+  const name = document.createElement("span");
+  name.className = "name";
+  name.textContent = who === "bot" ? "MoodAI" : "Kamu";
+
+  const time = document.createElement("span");
+  time.className = "time";
+  time.textContent = nowTime();
+
+  meta.appendChild(name);
+  meta.appendChild(time);
+
+  const bubble = document.createElement("div");
+  bubble.className = `bubble ${who}`;
+  bubble.textContent = text;
+
+  wrap.appendChild(meta);
+  wrap.appendChild(bubble);
+
+  log.appendChild(wrap);
+  log.scrollTop = log.scrollHeight;
+}
+    
+        async function prediksi() {
+  // ambil elemen
+  const tidurEl = document.getElementById("tidur_jam");
+  const stresEl = document.getElementById("stres");
+  const capekEl = document.getElementById("capek");
+  const aktivitasEl = document.getElementById("aktivitas");
+  const alertBox = document.getElementById("alert");
+
+  // reset error style + alert
+  [tidurEl, stresEl, capekEl, aktivitasEl].forEach(el => el.classList.remove("error"));
+  alertBox.classList.add("hidden");
+  alertBox.textContent = "";
+
+  const tidur = tidurEl.value.trim();
+  const stres = stresEl.value.trim();
+  const capek = capekEl.value.trim();
+  const aktivitas = aktivitasEl.value;
+
+  // validasi wajib isi
+  let ok = true;
+
+  if (tidur === "" || Number(tidur) <= 0) { tidurEl.classList.add("error"); ok = false; }
+  if (stres === "" || Number(stres) < 1 || Number(stres) > 5) { stresEl.classList.add("error"); ok = false; }
+  if (capek === "" || Number(capek) < 1 || Number(capek) > 5) { capekEl.classList.add("error"); ok = false; }
+  if (!aktivitas) { aktivitasEl.classList.add("error"); ok = false; }
+
+  if (!ok) {
+    alertBox.textContent = "Isi dulu semuanya ya 🙂 (Jam tidur > 0, stres 1–5, capek 1–5).";
+    alertBox.classList.remove("hidden");
+    return; // STOP: jangan panggil API
+  }
+
+  const data = {
+    tidur_jam: Number(tidur),
+    stres: Number(stres),
+    capek: Number(capek),
+    aktivitas: aktivitas
+  };
+
+    
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+    
+            const result = await response.json();
+            lastMood = result.mood;
+    
+            const pesan = {
+                happy: "Energi kamu lagi positif. Manfaatkan untuk hal yang bermakna, tapi tetap sisihkan waktu istirahat.",
+                neutral: "Kamu sedang di tengah-tengah. Coba lakukan hal kecil yang bikin nyaman—musik ringan atau jalan sebentar.",
+                bad: "Terlihat sedang menurun. Tidak apa-apa. Ambil napas, minum air, dan beri diri waktu untuk pulih."
+            };
+    
+            const saran = pesan[result.mood] || "Apa pun hasilnya, kamu berharga. Ambil langkah kecil yang terasa aman untukmu.";
+    
+            document.getElementById("hasil").innerHTML = `
+                <div><strong>Mood kemungkinan:</strong> ${result.mood}</div>
+                <div style="margin-top:6px;">${saran}</div>
+            `;
+    
+            // munculkan chat setelah prediksi
+            const chatSection = document.getElementById("chatSection");
+            chatSection.classList.remove("hidden");
+    
+            // reset chat log dan kasih opening message yang kontekstual
+            document.getElementById("chatLog").innerHTML = "";
+            addBubble(`Aku nangkep mood kamu lagi "${result.mood}". Mau cerita sedikit apa yang paling kerasa hari ini?`, "bot");
+        }
+    
+        async function sendChat() {
+            const input = document.getElementById("chatInput");
+            const text = input.value.trim();
+            if (!text) return;
+    
+            if (!lastMood) {
+                addBubble("Kita prediksi mood dulu ya 🙂", "bot");
+                return;
+            }
+    
+            addBubble(text, "user");
+            input.value = "";
+    
+            // panggil endpoint /chat (backend nanti kita tambah)
+            try {
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify({ mood: lastMood, message: text })
+                });
+    
+                if (!res.ok) {
+                    addBubble("Chat server-nya belum siap, tapi UI-nya udah oke 😄 (nanti kita tambahin endpoint /chat)", "bot");
+                    return;
+                }
+    
+                const data = await res.json();
+                addBubble(data.reply || "Aku dengerin ya…", "bot");
+            } catch (e) {
+                addBubble("Belum bisa konek ke chat. Pastikan server jalan ya.", "bot");
+            }
+        }
+    
+        document.getElementById("sendBtn").addEventListener("click", sendChat);
+        document.getElementById("chatInput").addEventListener("keydown", (e) => {
+            if (e.key === "Enter") sendChat();
+
+            if (data.suggestions && Array.isArray(data.suggestions)) {
+  const log = document.getElementById("chatLog");
+  const wrap = document.createElement("div");
+  wrap.style.display = "flex";
+  wrap.style.flexWrap = "wrap";
+  wrap.style.gap = "8px";
+
+  data.suggestions.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = s;
+    b.style.padding = "10px 12px";
+    b.style.borderRadius = "999px";
+    b.style.border = "1px solid #e8eef6";
+    b.style.background = "#fff";
+    b.style.cursor = "pointer";
+    b.onclick = () => {
+      document.getElementById("chatInput").value = s;
+      document.getElementById("sendBtn").click();
+    };
+    wrap.appendChild(b);
+  });
+
+  log.appendChild(wrap);
+  log.scrollTop = log.scrollHeight;
+}
+
+        });
+    </script>
+
+</body>
+</html>
